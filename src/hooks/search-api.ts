@@ -6,11 +6,11 @@ export type SearchResult = {
 	name: string;
 	description: string;
 	category: string;
-}
+};
 
 export type SearchApiParams = {
 	searchTerm: string;
-}
+};
 
 export const useSearchApi = ({ searchTerm }: SearchApiParams) => {
 	const searchQuery = useQuery({
@@ -20,8 +20,8 @@ export const useSearchApi = ({ searchTerm }: SearchApiParams) => {
 
 			const { data, error } = await supabase
 				.from("fruits")
-				.select("*") // 명시적으로 컬럼 지정
-				.ilike("name", `%${searchTerm}%`);
+				.select("*")
+        .or(`name.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%`);
 
 			if (error) {
 				console.error("Supabase error:", error); // 디버깅을 위한 로그 추가
