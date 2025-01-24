@@ -34,7 +34,9 @@ const SearchBox: React.FC<SearchBoxProps> = ({
 				placeholder={placeholder}
 				data-testid="search-input"
 			/>
-			<S.SearchButton onClick={handleSearch} data-testid="search-button">Search</S.SearchButton>
+			<S.SearchButton onClick={handleSearch} data-testid="search-button">
+				Search
+			</S.SearchButton>
 		</S.SearchContainer>
 	);
 };
