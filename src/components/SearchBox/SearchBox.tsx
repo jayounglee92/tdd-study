@@ -12,7 +12,11 @@ const SearchBox: React.FC<SearchBoxProps> = ({
 }) => {
 	const [searchTerm, setSearchTerm] = useState("");
 
-	const handleSearch = () => {
+	const handleSearch = async () => {
+		const response = await fetch("https://example.com/search");
+		const posts = await response.json();
+		console.log(posts);
+
 		if (onSearch) {
 			onSearch(searchTerm);
 		}

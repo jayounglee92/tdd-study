@@ -5,7 +5,9 @@ import { useSearchApi } from "../../hooks/search-api";
 
 const SearchContainer: React.FC = () => {
 	const [searchTerm, setSearchTerm] = useState("");
-	const { searchItems, isSearching, searchError } = useSearchApi({searchTerm});
+	const { searchItems, isSearching, searchError } = useSearchApi({
+		searchTerm,
+	});
 
 	const handleSearch = (newSearchTerm: string) => {
 		setSearchTerm(newSearchTerm);
@@ -29,12 +31,14 @@ const SearchContainer: React.FC = () => {
 					<div>검색 결과가 없습니다.</div>
 				)}
 
-				{!searchError && !isSearching && searchItems.map((result) => (
-					<S.SearchResultItem key={result.id}>
-						<h3>{result.name}</h3>
-						<p>{result.description}</p>
-					</S.SearchResultItem>
-				))}
+				{!searchError &&
+					!isSearching &&
+					searchItems.map((result) => (
+						<S.SearchResultItem key={result.id}>
+							<h3>{result.name}</h3>
+							<p>{result.description}</p>
+						</S.SearchResultItem>
+					))}
 			</S.SearchResults>
 		</S.Container>
 	);
