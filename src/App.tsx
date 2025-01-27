@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import SearchContainer from "./components/SearchContainer/SearchContainer";
+import SearchBox from "./components/SearchBox/SearchBox";
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -10,12 +10,10 @@ const queryClient = new QueryClient({
 	},
 });
 
-
-
 function App() {
 	return (
 		<QueryClientProvider client={queryClient}>
-			<SearchContainer />
+			<SearchBox />
 		</QueryClientProvider>
 	);
 }
