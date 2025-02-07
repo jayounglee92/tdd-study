@@ -20,9 +20,8 @@ const SearchBox = ({ onSearch }: SearchBoxProp) => {
 	});
 
 	const onSearchClick = () => {
-
 		handleSearch();
-		if(onSearch){
+		if (onSearch) {
 			onSearch();
 		}
 	};
@@ -30,9 +29,9 @@ const SearchBox = ({ onSearch }: SearchBoxProp) => {
 	const handleKeyPress = (e: React.KeyboardEvent) => {
 		if (e.key === "Enter") {
 			handleSearch();
-			if(onSearch){
-			onSearch();
-		}
+			if (onSearch) {
+				onSearch();
+			}
 		}
 	};
 

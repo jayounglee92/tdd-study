@@ -1,9 +1,9 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, test, expect, vi } from "vitest";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import SearchBox from "./SearchBox";
+import SearchBox from "../SearchBox/SearchBox";
 
-describe("SearchBox", () => {
+describe("SearchBox : 단위테스트", () => {
 	const queryClient = new QueryClient({
 		defaultOptions: {
 			queries: {

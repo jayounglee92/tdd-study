@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import SearchBox from "./SearchBox";
+import SearchBox from "../SearchBox/SearchBox";
 
 /**
  * search-box
@@ -14,7 +14,7 @@ import SearchBox from "./SearchBox";
  * * 4) 새로운 검색어 입력 시 이전 결과 초기화된다.
  */
 
-describe("SearchBox", () => {
+describe("SearchBox : 통합테스트", () => {
 	const queryClient = new QueryClient({
 		defaultOptions: {
 			queries: {
@@ -61,7 +61,7 @@ describe("SearchBox", () => {
 		const user = userEvent.setup();
 		renderSearchBox();
 
-			const searchInput = screen.getByTestId("search-input");
+		const searchInput = screen.getByTestId("search-input");
 		await user.type(searchInput, "John");
 		const searchButton = screen.getByTestId("search-button");
 		await user.click(searchButton);
