@@ -26,10 +26,10 @@ jobs:
       - name: Configure pnpm global path
         run: |
           echo "PNPM_HOME=$(pnpm root -g)" >> $GITHUB_ENV
-          echo "PATH=\$PNPM_HOME:\$PATH" >> $GITHUB_ENV
+          echo "PATH=\$PNPM_HOME/bin:\$PATH" >> $GITHUB_ENV
 
       - name: Install Vercel CLI
-        run: pnpm install --global vercel@canary
+        run: pnpm add --global vercel@canary
 
       - name: Pull Vercel Environment Information
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
