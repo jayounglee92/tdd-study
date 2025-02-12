@@ -1,0 +1,118 @@
+# workflow 이름
+name: ci
+
+# 워크플로우를 실행시키는 event
+on: [push]
+
+jobs:
+  # 의존성 설치
+  install-dependencies:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "20"
+
+      - name: Restore node modules from cache
+        id: restore-node-modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node
+
+      - name: Install dependencies
+        if: steps.restore-node-modules.outputs.cache-hit != 'true'
+        run: pnpm install
+
+  # lint 확인 및 수정
+  lint:
+    runs-on: ubuntu-latest
+    needs: install-dependencies
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "20"
+
+      - name: Restore node modules from cache
+        id: restore-node-modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies (if not cached)
+        if: steps.restore-node-modules.outputs.cache-hit != 'true'
+        run: pnpm install
+
+      - name: Run lint
+        run: pnpm run lint
+
+  # 테스트 검증
+  test:
+    runs-on: ubuntu-latest
+    needs: install-dependencies
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "20"
+
+      - name: Restore node modules from cache
+        id: restore-node-modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies (if not cached)
+        if: steps.restore-node-modules.outputs.cache-hit != 'true'
+        run: pnpm install
+
+      - name: Run tests
+        run: pnpm run test
+
+  # React Build
+  build:
+    runs-on: ubuntu-latest
+    needs: [install-dependencies, lint, test]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "20"
+
+      - name: Restore node modules from cache
+        id: restore-node-modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies (if not cached)
+        if: steps.restore-node-modules.outputs.cache-hit != 'true'
+        run: pnpm install
+
+      - name: Run Build
+        run: pnpm run build
