@@ -3,10 +3,11 @@ import * as S from "./styles";
 import { useSearch } from "../../hooks/useSearch";
 
 interface SearchBoxProp {
+	placeholder?: string;
 	onSearch?: () => void;
 }
 
-const SearchBox = ({ onSearch }: SearchBoxProp) => {
+const SearchBox = ({ placeholder, onSearch }: SearchBoxProp) => {
 	const [searchTerm, setSearchTerm] = useState("");
 	const {
 		searchResults,
@@ -47,7 +48,7 @@ const SearchBox = ({ onSearch }: SearchBoxProp) => {
 						resetSearch();
 					}}
 					onKeyDown={handleKeyPress}
-					placeholder={"Search..."}
+					placeholder={placeholder ?? "Search..."}
 					data-testid="search-input"
 				/>
 				<S.SearchButton

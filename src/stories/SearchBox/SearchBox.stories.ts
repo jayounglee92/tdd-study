@@ -28,6 +28,6 @@ export const WithCustomPlaceholder: Story = {
 export const WithSearchHandler: Story = {
 	args: {
 		placeholder: "Search...",
-		onSearch: (term) => alert(`검색어: ${term}`),
+		onSearch: () => {},
 	},
 };
