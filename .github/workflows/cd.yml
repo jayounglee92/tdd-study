@@ -24,7 +24,9 @@ jobs:
         run: npm install -g pnpm
 
       - name: Setup pnpm
-        run: pnpm setup
+        run: |
+          export SHELL=bash
+          pnpm setup
 
       - name: Configure pnpm global path
         run: |
