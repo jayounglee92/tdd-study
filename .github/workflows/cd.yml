@@ -23,6 +23,11 @@ jobs:
       - name: Install pnpm
         run: npm install -g pnpm
 
+      - name: Setup pnpm
+        run: |
+          pnpm setup
+          echo "::add-path::$(pnpm bin -g)"
+
       - name: Install Vercel CLI
         run: pnpm add --global vercel@canary
 
