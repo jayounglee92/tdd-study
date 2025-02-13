@@ -127,12 +127,25 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
+      - name: Restore Cypress cache
+        id: restore-cypress-cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/Cypress
+          key: ${{ runner.os }}-cypress-${{ hashFiles('pnpm-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-cypress-
+
       - name: Install dependencies (if not cached)
         if: steps.restore-node-modules.outputs.cache-hit != 'true'
         run: pnpm install
 
+      - name: Install Cypress (if not cached)
+        if: steps.restore-cypress-cache.outputs.cache-hit != 'true'
+        run: pnpm exec cypress install
+
       - name: Run Cypress tests
-        run: pnpm run cy:run
+        run: pnpm run cypress:run
 
   # lint 확인 및 수정
   lint:
