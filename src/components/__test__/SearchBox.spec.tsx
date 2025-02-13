@@ -39,9 +39,9 @@ describe("SearchBox : 통합테스트", () => {
 		const user = userEvent.setup();
 		renderSearchBox();
 
-		// 검색창에 'John' 입력
+		// 검색창에 '사과' 입력
 		const searchInput = screen.getByTestId("search-input");
-		await user.type(searchInput, "John");
+		await user.type(searchInput, "사과");
 
 		// 검색 버튼 클릭
 		const searchButton = screen.getByTestId("search-button");
@@ -52,9 +52,9 @@ describe("SearchBox : 통합테스트", () => {
 			expect(screen.queryByText("검색 중...")).not.toBeInTheDocument();
 		});
 
-		// 결과에 "John"이 포함된 항목이 표시되는지 확인
+		// 결과에 "사과"이 포함된 항목이 표시되는지 확인
 		const searchResults = screen.getByTestId("search-result");
-		expect(searchResults).toHaveTextContent("John");
+		expect(searchResults).toHaveTextContent("사과");
 	});
 
 	it("검색어 입력 후 Enter 키를 눌러도 검색이 실행되어야 함", async () => {
@@ -62,7 +62,7 @@ describe("SearchBox : 통합테스트", () => {
 		renderSearchBox();
 
 		const searchInput = screen.getByTestId("search-input");
-		await user.type(searchInput, "John");
+		await user.type(searchInput, "사과");
 		const searchButton = screen.getByTestId("search-button");
 		await user.click(searchButton);
 
@@ -71,7 +71,7 @@ describe("SearchBox : 통합테스트", () => {
 		});
 
 		const searchResults = screen.getByTestId("search-result");
-		expect(searchResults).toHaveTextContent("John");
+		expect(searchResults).toHaveTextContent("사과");
 	});
 
 	it("검색 결과가 없을 경우 적절한 메시지가 표시되어야 함", async () => {
@@ -95,7 +95,7 @@ describe("SearchBox : 통합테스트", () => {
 
 		// 첫 번째 검색
 		const searchInput = screen.getByTestId("search-input");
-		await user.type(searchInput, "John");
+		await user.type(searchInput, "사과");
 		const searchButton = screen.getByTestId("search-button");
 		await user.click(searchButton);
 
@@ -105,9 +105,9 @@ describe("SearchBox : 통합테스트", () => {
 
 		// 새로운 검색어 입력
 		await user.clear(searchInput);
-		await user.type(searchInput, "Jane");
+		await user.type(searchInput, "오렌지");
 
 		// 이전 검색 결과가 초기화되었는지 확인
-		expect(screen.queryByText("John")).not.toBeInTheDocument();
+		expect(screen.queryByText("사과")).not.toBeInTheDocument();
 	});
 });
