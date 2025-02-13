@@ -68,18 +68,14 @@ const SearchBox = ({ placeholder, onSearch }: SearchBoxProp) => {
 					</S.ErrorMessage>
 				)}
 
-				{!isLoading && !isError && searchResults?.length === 0 && (
-					<div>검색 결과가 없습니다.</div>
-				)}
+				{searchResults?.data?.length === 0 && <div>검색 결과가 없습니다.</div>}
 
-				{!isError &&
-					!isLoading &&
-					searchResults?.map((user) => (
-						<S.SearchResultItem key={user.id}>
-							<h3>{user.firstName}</h3>
-							<p>{user.lastName}</p>
-						</S.SearchResultItem>
-					))}
+				{searchResults?.data?.map((fruit) => (
+					<S.SearchResultItem key={fruit.id}>
+						<h3>{fruit.name}</h3>
+						<p>{fruit.description}</p>
+					</S.SearchResultItem>
+				))}
 			</S.SearchResults>
 		</S.Container>
 	);

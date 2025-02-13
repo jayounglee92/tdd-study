@@ -13,7 +13,7 @@ const queryClient = new QueryClient({
 function App() {
 	return (
 		<QueryClientProvider client={queryClient}>
-			<SearchBox />
+			<SearchBox placeholder="과일 이름을 검색하세요." />
 		</QueryClientProvider>
 	);
 }

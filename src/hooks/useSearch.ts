@@ -1,27 +1,36 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-
-interface SearchResult {
-	id: string;
-	firstName: string;
-	lastName: string;
-}
+import supabase from "../server/supabase";
+import { PostgrestSingleResponse } from "@supabase/supabase-js";
 
 interface UseSearchProps {
 	searchTerm: string;
 }
+interface Fruit {
+	id: number;
+	name: string;
+	description: string;
+	category: string;
+}
 
 const fetchSearchResults = async (
-	searchTerm: string
-): Promise<SearchResult[] | null> => {
-	const response = await fetch(
-		`https://example.com/search?searchTerm=${encodeURIComponent(searchTerm)}`
-	);
-	return response.json();
+	searchTerm: string = ""
+): Promise<PostgrestSingleResponse<Fruit[]>> => {
+	let query = supabase.from("fruits").select();
+
+	if (searchTerm) {
+		query = query.or(
+			`name.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%`
+		);
+	}
+
+	const response: PostgrestSingleResponse<Fruit[]> = await query;
+
+	return response;
 };
 
 export const useSearch = ({ searchTerm }: UseSearchProps) => {
-	const [isSearching, setIsSearching] = useState(false);
+	const [isSearching, setIsSearching] = useState(true);
 
 	const {
 		data: searchResults,
