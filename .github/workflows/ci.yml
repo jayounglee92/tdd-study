@@ -33,74 +33,10 @@ jobs:
         if: steps.restore-node-modules.outputs.cache-hit != 'true'
         run: pnpm install
 
-  # lint 확인 및 수정
-  lint:
-    runs-on: ubuntu-latest
-    needs: install-dependencies
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: "20"
-
-      - name: Install pnpm
-        run: npm install -g pnpm
-
-      - name: Restore node modules from cache
-        id: restore-node-modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - name: Install dependencies (if not cached)
-        if: steps.restore-node-modules.outputs.cache-hit != 'true'
-        run: pnpm install
-
-      - name: Run lint
-        run: pnpm run lint
-
-  # 테스트 검증
-  test:
-    runs-on: ubuntu-latest
-    needs: install-dependencies
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: "20"
-
-      - name: Install pnpm
-        run: npm install -g pnpm
-
-      - name: Restore node modules from cache
-        id: restore-node-modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - name: Install dependencies (if not cached)
-        if: steps.restore-node-modules.outputs.cache-hit != 'true'
-        run: pnpm install
-
-      - name: Run tests
-        run: pnpm run test
-
   # React Build
   build:
     runs-on: ubuntu-latest
-    needs: [install-dependencies, lint, test]
+    needs: install-dependencies
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -128,3 +64,72 @@ jobs:
 
       - name: Run Build
         run: pnpm run build
+
+  # 테스트 검증
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "20"
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Restore node modules from cache
+        id: restore-node-modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies (if not cached)
+        if: steps.restore-node-modules.outputs.cache-hit != 'true'
+        run: pnpm install
+
+      - name: Set environment variables
+        run: |
+          echo "VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }}" >> $GITHUB_ENV
+          echo "VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }}" >> $GITHUB_ENV
+
+      - name: Run tests
+        run: pnpm run test
+
+  # lint 확인 및 수정
+  lint:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "20"
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Restore node modules from cache
+        id: restore-node-modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies (if not cached)
+        if: steps.restore-node-modules.outputs.cache-hit != 'true'
+        run: pnpm install
+
+      - name: Run lint
+        run: pnpm run lint
