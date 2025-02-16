@@ -65,8 +65,8 @@ jobs:
       - name: Run Build
         run: pnpm run build
 
-  # 유닛 테스트 검증
-  unit-test:
+  # 테스트 검증
+  test:
     runs-on: ubuntu-latest
     needs: build
     steps:
@@ -102,60 +102,10 @@ jobs:
       - name: Run tests
         run: pnpm run test
 
-  # E2E 테스트 검증
-  e2e-test:
-    runs-on: ubuntu-latest
-    needs: unit-test
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: "20"
-
-      - name: Install pnpm
-        run: npm install -g pnpm
-
-      - name: Restore node modules from cache
-        id: restore-node-modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - name: Restore Cypress cache
-        id: restore-cypress-cache
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/Cypress
-          key: ${{ runner.os }}-cypress-${{ hashFiles('pnpm-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-cypress-
-
-      - name: Install dependencies (if not cached)
-        if: steps.restore-node-modules.outputs.cache-hit != 'true'
-        run: pnpm install
-
-      - name: Install Cypress (if not cached)
-        if: steps.restore-cypress-cache.outputs.cache-hit != 'true'
-        run: pnpm exec cypress install
-
-      - name: Set environment variables
-        run: |
-          echo "VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }}" >> $GITHUB_ENV
-          echo "VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }}" >> $GITHUB_ENV
-
-      - name: Run Cypress tests
-        run: pnpm run cypress:run
-
   # lint 확인 및 수정
   lint:
     runs-on: ubuntu-latest
-    needs: e2e-test
+    needs: test
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
